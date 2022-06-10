@@ -72,11 +72,12 @@ def wordManagement(request):
 
 @api_view(['GET', 'DELETE'])
 def deleteWord(request, word):
-    word_instance = get_object_or_404(Wordbook, word=word)
+    word_obj = get_object_or_404(Wordbook, word=word)
     if request.method == 'GET':
-        serializer = WordbookSerializer(word_instance, many=False)
+        serializer = WordbookSerializer(word_obj, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    # Deletes a single word from the data store.
     elif request.method == 'DELETE':
         anagram = ''.join(sorted(word))
         try:
@@ -85,12 +86,13 @@ def deleteWord(request, word):
             # nothing to do
             return Response(status=status.HTTP_200_OK)
 
-        word_instance.delete()
+        word_obj.delete()
         anagram_obj.delete_anagram_word(word)
         return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
+# Endpoint that returns a count of words in the corpus and min/max/median/average word length
 def getStatistics(request):
     min_value = Wordbook.objects.all().aggregate(Min('word_length'))
     max_value = Wordbook.objects.all().aggregate(Max('word_length'))
@@ -116,6 +118,7 @@ def getStatistics(request):
 
 
 @api_view(['GET', 'POST'])
+# Endpoint that takes a set of words and returns whether or not they are all anagrams of each other
 def wordsCompare(request):
 
     if request.method == 'GET':
@@ -144,6 +147,7 @@ def wordsCompare(request):
 
 
 @api_view(['GET'])
+# Endpoint that identifies words with the most anagrams
 def getMostAnagrams(request):
     anagram_obj = Anagram.objects.all().order_by('-anagrams_count')[0]
     content = {"anagrams": anagram_obj.word_list}
@@ -151,6 +155,7 @@ def getMostAnagrams(request):
 
 
 @api_view(['GET'])
+# Endpoint to return all anagram groups of size >= x
 def getAnagramsGroup(request, size):
     # set a default value of returned responses
     limit = 20
@@ -160,17 +165,18 @@ def getAnagramsGroup(request, size):
 
 
 @api_view(['GET', 'DELETE'])
+# Endpoint to delete a word and all of its anagrams
 def deleteAnagrams(request, word):
     anagram = ''.join(sorted(word))
     anagram_obj = get_object_or_404(Anagram, anagram_key=anagram)
-    word_instance = Wordbook.objects.filter(anagram_key=anagram)
+    word_obj = Wordbook.objects.filter(anagram_key=anagram)
     if request.method == 'GET':
         serializer = AnagramSerializer(anagram_obj, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'DELETE':
-        if word_instance:
-            word_instance.delete()
+        if word_obj:
+            word_obj.delete()
 
         if anagram_obj:
             anagram_obj.delete()
