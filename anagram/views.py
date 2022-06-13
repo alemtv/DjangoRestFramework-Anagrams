@@ -149,9 +149,12 @@ def wordsCompare(request):
 @api_view(['GET'])
 # Endpoint that identifies words with the most anagrams
 def getMostAnagrams(request):
-    anagram_obj = Anagram.objects.all().order_by('-anagrams_count')[0]
-    content = {"anagrams": anagram_obj.word_list}
-    return Response(content, status=status.HTTP_200_OK)
+    max_obj = Anagram.objects.all().order_by('-anagrams_count')[0]
+    anagram_obj = Anagram.objects.filter(anagrams_count=max_obj.anagrams_count)
+    serializer = AnagramSerializer(anagram_obj, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+    #content = {"anagrams": anagram_obj.word_list}
+    #return Response(content, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
