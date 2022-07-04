@@ -7,6 +7,7 @@ Using the sorted function in python, all words are converted to anagram_key valu
 According to this model, the list of anagrams must be returned very quickly. Because the database searches for a single record by primary_key (Anagram.anagram_key).
 
 Also this model makes it easy to collect statistical information such as: words with the most anagrams or groups of anagrams by size.
+
 ![DB view](https://saniokas.pythonanywhere.com/static/blog/images/db_view.jpg)
 
 ## Installation
