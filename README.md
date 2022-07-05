@@ -10,6 +10,9 @@ Also this model makes it easy to collect statistical information such as: words 
 
 ![DB view](https://saniokas.pythonanywhere.com/static/blog/images/db_view.jpg)
 
+**WordBook** - table to store all words (provided in dictionary.txt).
+**Anagram** - table to store the relationships between anagram_key and the world list. Anagram table is updated each time a new word is created or an existing word is deleted.
+
 ## Installation
 1. **Create and activate the virtual environment.** 
 2. **Clone the project.** Open the command line, go to the folder where you want to save the project and enter the following command:
@@ -28,7 +31,19 @@ python manage.py migrate
 ```
 python manage.py createsuperuser
 ```
-6. **Run the development server**
+6. **Install demo data.** The data loading script (anagram/scripts/load_data.py) is used for loading the data from txt file. It will take about one hour.
+```
+python manage.py runscript load_data
+```
+7. **Run the development server**
 ```
 python manage.py runserver
 ```
+
+## API endpoints
+- `POST /words.json`: Takes a JSON array of English-language words and adds them to the corpus (data store).
+- `GET /anagrams/{word}.json`:
+  - Returns a JSON array of English-language words that are anagrams of the word passed in the URL.
+  - This endpoint should support an optional query param that indicates the maximum number of results to return.
+- `DELETE /words/{word}.json`: Deletes a single word from the data store.
+- `DELETE /words.json`: Deletes all contents of the data store.
