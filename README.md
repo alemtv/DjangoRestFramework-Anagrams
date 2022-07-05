@@ -41,9 +41,14 @@ python manage.py runserver
 ```
 
 ## API endpoints
-- `POST /words.json`: Takes a JSON array of English-language words and adds them to the corpus (data store).
-- `GET /anagrams/{word}.json`:
+- `POST /words`: Takes a JSON array of English-language words and adds them to the corpus (data store).
+- `GET /anagrams/{word}`:
   - Returns a JSON array of English-language words that are anagrams of the word passed in the URL.
-  - This endpoint should support an optional query param that indicates the maximum number of results to return.
-- `DELETE /words/{word}.json`: Deletes a single word from the data store.
-- `DELETE /words.json`: Deletes all contents of the data store.
+  - This endpoint support an optional query param that indicates the maximum number of results to return (`/anagrams/{word}/?limit=2`).
+- `DELETE /words/{word}`: Deletes a single word from the data store.
+- `DELETE /words`: Deletes all contents of the data store.
+- `GET /statistics`: Endpoint that returns a count of words in the corpus and min/max/median/average word length.
+- `GET /most-anagrams`: Endpoint that identifies words with the most anagrams.
+- `POST /compare`: Endpoint that takes a set of words and returns whether or not they are all anagrams of each other .
+- `GET /anagrams-group/x`: Endpoint to return all anagram groups of size >= *x*. Output (maximum of 20 values are returned).
+- `DELETE /delete/{word}`: Endpoint to delete a word *and all of its anagrams* 
