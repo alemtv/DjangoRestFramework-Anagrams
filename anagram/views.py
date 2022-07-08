@@ -1,8 +1,11 @@
 from django.shortcuts import get_object_or_404
 from django.db.models import Avg, Max, Min
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from anagram.models import Wordbook, Anagram
 from .serializers import WordbookSerializer, AnagramSerializer
 
@@ -118,6 +121,7 @@ def getStatistics(request):
 
 
 @api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
 # Endpoint that takes a set of words and returns whether or not they are all anagrams of each other
 def wordsCompare(request):
 

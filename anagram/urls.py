@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from . import views
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('most-anagrams/', views.getMostAnagrams, name='getMostAnagrams'),
     path('anagrams-group/<int:size>', views.getAnagramsGroup, name='getAnagramsGroup'),
     path('delete/<str:word>', views.deleteAnagrams, name='deleteAnagrams'),
+    path('api-auth/', include('rest_framework.urls')),
 ]
